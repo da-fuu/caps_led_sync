@@ -23,23 +23,42 @@ class LanguageChangeDetector
         while (true)
         {
             IntPtr foregroundWindow = GetForegroundWindow();
+			if (foregroundWindow == (IntPtr)(0))
+			{
+				Thread.Sleep(1000);
+				continue;
+			}
 			uint temp;
             uint threadId = GetWindowThreadProcessId(foregroundWindow, out temp);
+			if (threadId == 0)
+			{
+				Thread.Sleep(1000);
+				continue;
+			}
             UInt32 keyboardLayout = GetKeyboardLayout(threadId);
 
             if (keyboardLayout != lastLayout)
             {
                 lastLayout = keyboardLayout;
 				int cultureId = (int)(keyboardLayout & 0xFFFF);
-				string newLanguage = System.Globalization.CultureInfo.GetCultureInfo(cultureId).Name;
-				if (newLanguage == "ru-RU")
-                {
-                    CapsLockLight.SetCapsLock(true);
-                }
-                else
-                {
-                    CapsLockLight.SetCapsLock(false);
-                }            
+				try
+				{	
+					string newLanguage = System.Globalization.CultureInfo.GetCultureInfo(cultureId).Name;
+					if (newLanguage == "ru-RU")
+					{
+						CapsLockLight.SetCapsLock(true);
+					}
+					else
+					{
+						CapsLockLight.SetCapsLock(false);
+					} 
+					continue;
+				}
+				catch (Exception)
+				{
+					Thread.Sleep(1000);
+					continue;
+				}
 			}
             Thread.Sleep(100);
         }
