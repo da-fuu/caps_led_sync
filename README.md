@@ -1,1 +1,1 @@
-Simple C# program which synchronizes CapsLock LED with current keyboard layout
+Simple C and C# programs which synchronizes CapsLock LED with current keyboard layout
