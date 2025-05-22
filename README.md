@@ -9,5 +9,5 @@ C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc /out:lang.exe /target:winexe
 
 C
 ```
-cl /O2 lang.c /link user32.lib /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup
+cl /O2 /Zl /GS- /GR- /kernel lang.c /link /NODEFAULTLIB user32.lib kernel32.lib  /SUBSYSTEM:WINDOWS /ENTRY:main /OUT:lang.exe
 ```
