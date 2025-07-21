@@ -52,16 +52,21 @@ BOOL SetCapsLock(BOOL enable)
 int main()
 {
 	HKL lastLayout = (HKL)0x0409;
-	
+	GUITHREADINFO gti = { sizeof(GUITHREADINFO) };
+
 	while (TRUE)
 	{
-		HWND foregroundWindow = GetForegroundWindow();
-		if (foregroundWindow == NULL)
+		if (!GetGUIThreadInfo(0, &gti))
 		{
 			Sleep(1000);
 			continue;
 		}
-		DWORD threadId = GetWindowThreadProcessId(foregroundWindow, NULL);
+		if (gti.hwndFocus == NULL)
+		{
+			Sleep(1000);
+			continue;
+		}
+		DWORD threadId = GetWindowThreadProcessId(gti.hwndFocus, NULL);
 		if (threadId == 0)
 		{
 			Sleep(1000);
